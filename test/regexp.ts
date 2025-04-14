@@ -1,9 +1,7 @@
-const assert = require('assert');
+import regexp from '../src/lib/regexp';
+import { expect } from 'chai';
 
-const regexp = require('./regexp.js');
-
-const testString =
-`
+const testString = `
 // SPDX-License-Identifier: MIT
 
 pragma solidity ^0.7.0;
@@ -42,8 +40,7 @@ abstract contract Token is ERC20 {
 }
 `;
 
-const expectedOutput =
-`
+const expectedOutput = `
 // SPDX-License-Identifier: MIT
 
 pragma solidity ^0.7.0;
@@ -64,17 +61,22 @@ abstract contract Token is ERC20 {
 }
 `;
 
-describe('regular expressions', function () {
-  it('remove console.log imports', function () {
-    assert(!testString.replace(regexp.imports, '').includes('console.sol'));
+describe('regular expressions', () => {
+  it('remove console.log imports', () => {
+    expect(testString.replace(regexp.imports, '')).not.to.include(
+      'console.sol',
+    );
   });
 
-  it('remove console.log calls', function () {
-    assert(!testString.replace(regexp.calls, '').includes('console.log'));
+  it('remove console.log calls', () => {
+    expect(testString.replace(regexp.calls, '')).not.to.include('console.log');
   });
 
-  it('leave unrelated code intact', function () {
-    let output = testString.replace(regexp.imports, '').replace(regexp.calls, '');
-    assert.equal(output, expectedOutput);
+  it('leave unrelated code intact', () => {
+    const output = testString
+      .replace(regexp.imports, '')
+      .replace(regexp.calls, '');
+
+    expect(output).to.equal(expectedOutput);
   });
 });
