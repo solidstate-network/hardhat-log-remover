@@ -1,58 +1,46 @@
-import { name as pluginName } from '../../package.json';
-import regexp from '../lib/regexp';
+import pkg from '../../package.json';
+import regexp from '../lib/regexp.js';
 import fs from 'fs';
-import {
-  TASK_COMPILE,
-  TASK_COMPILE_SOLIDITY_GET_SOURCE_PATHS,
-  TASK_COMPILE_SOLIDITY_GET_SOURCE_NAMES,
-  TASK_COMPILE_SOLIDITY_GET_DEPENDENCY_GRAPH,
-} from 'hardhat/builtin-tasks/task-names';
 import { task } from 'hardhat/config';
 import { HardhatPluginError } from 'hardhat/plugins';
-import { ResolvedFile } from 'hardhat/types';
 
-task(
-  'remove-logs',
-  'Removes console.log calls and imports from local source files',
-  async (args, hre) => {
+export default task('remove-logs')
+  .setDescription(
+    'Removes console.log calls and imports from local source files',
+  )
+  .setAction(async (args, hre) => {
     try {
-      await hre.run(TASK_COMPILE);
+      // TODO: import task name constant
+      await hre.tasks.getTask('compile').run();
     } catch (e) {
       throw new HardhatPluginError(
-        pluginName,
+        pkg.name,
         'failed to compile contracts before removing logs',
       );
     }
 
-    const sourcePaths = await hre.run(TASK_COMPILE_SOLIDITY_GET_SOURCE_PATHS);
-
-    const sourceNames = await hre.run(TASK_COMPILE_SOLIDITY_GET_SOURCE_NAMES, {
-      sourcePaths,
-    });
-
-    let graph = await hre.run(TASK_COMPILE_SOLIDITY_GET_DEPENDENCY_GRAPH, {
-      sourceNames,
-    });
+    const sourcePaths = await hre.solidity.getRootFilePaths();
 
     let count = 0;
 
-    const files: ResolvedFile[] = graph.getResolvedFiles();
+    await Promise.all(
+      sourcePaths.map(async (sourcePath) => {
+        const content = await fs.promises.readFile(sourcePath, 'utf-8');
 
-    files.forEach(({ absolutePath, content }) => {
-      const { rawContent } = content;
-      if (
-        rawContent.includes('console.log') ||
-        rawContent.includes('console.sol')
-      ) {
-        let output = rawContent
-          .replace(regexp.imports, '')
-          .replace(regexp.calls, '');
+        if (
+          content.includes('console.log') ||
+          content.includes('console.sol')
+        ) {
+          const output = content
+            .replace(regexp.imports, '')
+            .replace(regexp.calls, '');
 
-        fs.writeFileSync(absolutePath, output);
-        count++;
-      }
-    });
+          await fs.promises.writeFile(sourcePath, output);
+          count++;
+        }
+      }),
+    );
 
     console.log(`Removed logs from ${count} sources.`);
-  },
-);
+  })
+  .build();

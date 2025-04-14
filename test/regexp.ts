@@ -1,4 +1,4 @@
-import regexp from '../src/lib/regexp';
+import regexp from '../src/lib/regexp.js';
 import { expect } from 'chai';
 
 const testString = `

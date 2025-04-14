@@ -1,8 +1,8 @@
 import { expect } from 'chai';
 import fs from 'fs';
 import hre from 'hardhat';
-import { TASK_COMPILE_SOLIDITY_GET_SOURCE_PATHS } from 'hardhat/builtin-tasks/task-names';
 
+// TODO: store task name as constant and export
 const TASK_REMOVE_LOGS = 'remove-logs';
 
 const readContractSource = async (name: string) => {
@@ -14,9 +14,7 @@ describe(TASK_REMOVE_LOGS, () => {
   const cache: { [sourcePath: string]: string } = {};
 
   before(async () => {
-    const sourcePaths: string[] = await hre.run(
-      TASK_COMPILE_SOLIDITY_GET_SOURCE_PATHS,
-    );
+    const sourcePaths = await hre.solidity.getRootFilePaths();
 
     for (const sourcePath of sourcePaths) {
       cache[sourcePath] = fs.readFileSync(sourcePath).toString();
@@ -33,7 +31,7 @@ describe(TASK_REMOVE_LOGS, () => {
     const contentsBefore = await readContractSource('ContractWithLogs');
     expect(contentsBefore).to.include('console.log');
 
-    await hre.run(TASK_REMOVE_LOGS);
+    await hre.tasks.getTask(TASK_REMOVE_LOGS).run();
 
     const contentsAfter = await readContractSource('ContractWithLogs');
     expect(contentsAfter).not.to.include('console.sol');
@@ -43,7 +41,7 @@ describe(TASK_REMOVE_LOGS, () => {
     const contentsBefore = await readContractSource('ContractWithLogs');
     expect(contentsBefore).to.include('console.sol');
 
-    await hre.run(TASK_REMOVE_LOGS);
+    await hre.tasks.getTask(TASK_REMOVE_LOGS).run();
 
     const contentsAfter = await readContractSource('ContractWithLogs');
     expect(contentsAfter).not.to.include('console.sol');
