@@ -17,6 +17,7 @@
   ],
   "repository": "github:solidstate-network/hardhat-log-remover",
   "author": "Nick Barry",
+  "type": "module",
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
   "scripts": {
@@ -29,7 +30,7 @@
     "src/"
   ],
   "peerDependencies": {
-    "hardhat": "^2.0.0"
+    "hardhat": "3.0.0-next.3"
   },
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^4.3.0",
@@ -38,7 +39,7 @@
     "@types/node": "^20.14.6",
     "chai": "^4.4.1",
     "eslint-plugin-mocha": "^8.0.0",
-    "hardhat": "^2.0.0",
+    "hardhat": "3.0.0-next.3",
     "husky": "^9.0.11",
     "lint-staged": "^15.2.7",
     "mocha": "^8.1.3",
