@@ -14,6 +14,8 @@ import "hardhat/console.sol";
 import
 'hardhat/console.sol'
 ;
+import { console } from 'hardhat/console.sol';
+import{console}from 'hardhat/console.sol';
 
 abstract contract Token is IERC20 {
   uint private _n;
