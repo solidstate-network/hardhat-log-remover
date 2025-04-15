@@ -1,8 +1,7 @@
 import pkg from '../../package.json';
-import regexp from '../lib/regexp.js';
+import { removeLogs } from '../lib/log_remover.js';
 import { HardhatPluginError } from 'hardhat/plugins';
 import { NewTaskActionFunction } from 'hardhat/types/tasks';
-import fs from 'node:fs';
 
 const action: NewTaskActionFunction = async (args, hre) => {
   try {
@@ -17,24 +16,7 @@ const action: NewTaskActionFunction = async (args, hre) => {
 
   const sourcePaths = await hre.solidity.getRootFilePaths();
 
-  let count = 0;
-
-  await Promise.all(
-    sourcePaths.map(async (sourcePath) => {
-      const content = await fs.promises.readFile(sourcePath, 'utf-8');
-
-      if (content.includes('console.log') || content.includes('console.sol')) {
-        const output = content
-          .replace(regexp.imports, '')
-          .replace(regexp.calls, '');
-
-        await fs.promises.writeFile(sourcePath, output);
-        count++;
-      }
-    }),
-  );
-
-  console.log(`Removed logs from ${count} sources.`);
+  await removeLogs(sourcePaths);
 };
 
 export default action;
