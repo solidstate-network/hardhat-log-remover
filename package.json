@@ -33,16 +33,13 @@
     "hardhat": "3.0.0-next.3"
   },
   "devDependencies": {
+    "@nomicfoundation/hardhat-node-test-runner": "^3.0.0-next.0",
     "@trivago/prettier-plugin-sort-imports": "^5.2.2",
-    "@types/chai": "^5.2.1",
-    "@types/mocha": "^10.0.10",
     "@types/node": "^22.14.1",
-    "chai": "^5.2.0",
     "eslint-plugin-mocha": "^10.5.0",
     "hardhat": "3.0.0-next.3",
     "husky": "^9.1.7",
     "lint-staged": "^15.5.1",
-    "mocha": "^11.1.0",
     "prettier": "^3.5.3",
     "prettier-plugin-solidity": "^1.4.2",
     "ts-node": "^10.9.2",

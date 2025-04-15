@@ -1,5 +1,6 @@
 import regexp from '../src/lib/regexp.js';
-import { expect } from 'chai';
+import assert from 'node:assert';
+import { describe, it } from 'node:test';
 
 const testString = `
 // SPDX-License-Identifier: MIT
@@ -63,13 +64,13 @@ abstract contract Token is ERC20 {
 
 describe('regular expressions', () => {
   it('remove console.log imports', () => {
-    expect(testString.replace(regexp.imports, '')).not.to.include(
-      'console.sol',
-    );
+    assert(testString.includes('console.sol'));
+    assert(!testString.replace(regexp.imports, '').includes('console.sol'));
   });
 
   it('remove console.log calls', () => {
-    expect(testString.replace(regexp.calls, '')).not.to.include('console.log');
+    assert(testString.includes('console.log'));
+    assert(!testString.replace(regexp.calls, '').includes('console.log'));
   });
 
   it('leave unrelated code intact', () => {
@@ -77,6 +78,6 @@ describe('regular expressions', () => {
       .replace(regexp.imports, '')
       .replace(regexp.calls, '');
 
-    expect(output).to.equal(expectedOutput);
+    assert.equal(output, expectedOutput);
   });
 });

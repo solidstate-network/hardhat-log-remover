@@ -1,6 +1,7 @@
-import { expect } from 'chai';
 import fs from 'fs';
 import hre from 'hardhat';
+import assert from 'node:assert';
+import { describe, it, before, afterEach } from 'node:test';
 
 // TODO: store task name as constant and export
 const TASK_REMOVE_LOGS = 'remove-logs';
@@ -29,21 +30,21 @@ describe(TASK_REMOVE_LOGS, () => {
 
   it('removes console.log calls from source file', async () => {
     const contentsBefore = await readContractSource('ContractWithLogs');
-    expect(contentsBefore).to.include('console.log');
+    assert(contentsBefore.includes('console.log'));
 
     await hre.tasks.getTask(TASK_REMOVE_LOGS).run();
 
     const contentsAfter = await readContractSource('ContractWithLogs');
-    expect(contentsAfter).not.to.include('console.sol');
+    assert(!contentsAfter.includes('console.log'));
   });
 
   it('removes console.sol imports from souce file', async () => {
     const contentsBefore = await readContractSource('ContractWithLogs');
-    expect(contentsBefore).to.include('console.sol');
+    assert(contentsBefore.includes('console.sol'));
 
     await hre.tasks.getTask(TASK_REMOVE_LOGS).run();
 
     const contentsAfter = await readContractSource('ContractWithLogs');
-    expect(contentsAfter).not.to.include('console.sol');
+    assert(!contentsAfter.includes('console.sol'));
   });
 });
