@@ -7,7 +7,7 @@ const testString = `
 
 pragma solidity ^0.7.0;
 
-import '@openzeppelin/contracts/token/ERC20/ERC20.sol';
+import { IERC20 } from '@solidstate/contracts/interfaces/IERC20.sol';
 import 'hardhat/console.sol';
 import'hardhat/console.sol';
 import "hardhat/console.sol";
@@ -15,7 +15,7 @@ import
 'hardhat/console.sol'
 ;
 
-abstract contract Token is ERC20 {
+abstract contract Token is IERC20 {
   uint private _n;
 
   function runAction () external {
@@ -46,9 +46,9 @@ const expectedOutput = `
 
 pragma solidity ^0.7.0;
 
-import '@openzeppelin/contracts/token/ERC20/ERC20.sol';
+import { IERC20 } from '@solidstate/contracts/interfaces/IERC20.sol';
 
-abstract contract Token is ERC20 {
+abstract contract Token is IERC20 {
   uint private _n;
 
   function runAction () external {
