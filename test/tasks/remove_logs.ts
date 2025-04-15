@@ -30,21 +30,21 @@ describe(TASK_REMOVE_LOGS, () => {
 
   it('removes console.log calls from source file', async () => {
     const contentsBefore = await readContractSource('ContractWithLogs');
-    assert(contentsBefore.includes('console.log'));
+    assert.match(contentsBefore, /console/);
 
     await hre.tasks.getTask(TASK_REMOVE_LOGS).run();
 
     const contentsAfter = await readContractSource('ContractWithLogs');
-    assert(!contentsAfter.includes('console.log'));
+    assert.doesNotMatch(contentsAfter, /console/);
   });
 
   it('removes console.sol imports from souce file', async () => {
     const contentsBefore = await readContractSource('ContractWithLogs');
-    assert(contentsBefore.includes('console.sol'));
+    assert.match(contentsBefore, /console/);
 
     await hre.tasks.getTask(TASK_REMOVE_LOGS).run();
 
     const contentsAfter = await readContractSource('ContractWithLogs');
-    assert(!contentsAfter.includes('console.sol'));
+    assert.doesNotMatch(contentsAfter, /console/);
   });
 });
