@@ -65,11 +65,13 @@ abstract contract Token is IERC20 {
 describe('regular expressions', () => {
   it('remove console.sol imports', () => {
     assert.match(testString, /console\.sol/);
+    assert.match(testString.replace(regexp.imports, ''), /console\.log/);
     assert.doesNotMatch(testString.replace(regexp.imports, ''), /console\.sol/);
   });
 
   it('remove console.log calls', () => {
     assert.match(testString, /console\.log/);
+    assert.match(testString.replace(regexp.calls, ''), /console\.sol/);
     assert.doesNotMatch(testString.replace(regexp.calls, ''), /console\.log/);
   });
 
