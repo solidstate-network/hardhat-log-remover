@@ -1,10 +1,8 @@
+import { TASK_REMOVE_LOGS } from '../../src/task_names.js';
 import fs from 'fs';
 import hre from 'hardhat';
 import assert from 'node:assert';
 import { describe, it, before, afterEach } from 'node:test';
-
-// TODO: store task name as constant and export
-const TASK_REMOVE_LOGS = 'remove-logs';
 
 const readContractSource = async (name: string) => {
   const artifact = await hre.artifacts.readArtifact(name);
