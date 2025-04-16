@@ -30,14 +30,14 @@
     "src/"
   ],
   "peerDependencies": {
-    "hardhat": "3.0.0-next.3"
+    "hardhat": "3.0.0-next.4"
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-node-test-runner": "^3.0.0-next.0",
     "@trivago/prettier-plugin-sort-imports": "^5.2.2",
     "@types/node": "^22.14.1",
     "eslint-plugin-mocha": "^10.5.0",
-    "hardhat": "3.0.0-next.3",
+    "hardhat": "3.0.0-next.4",
     "husky": "^9.1.7",
     "lint-staged": "^15.5.1",
     "prettier": "^3.5.3",
