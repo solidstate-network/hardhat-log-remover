@@ -28,7 +28,7 @@ describe(TASK_REMOVE_LOGS, () => {
 
   it('removes console.log calls from source file', async () => {
     const contentsBefore = await readContractSource('ContractWithLogs');
-    assert.match(contentsBefore, /nomatch/);
+    assert.match(contentsBefore, /console/);
 
     await hre.tasks.getTask(TASK_REMOVE_LOGS).run();
 
