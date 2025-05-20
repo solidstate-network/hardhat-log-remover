@@ -1,12 +1,12 @@
 import pkg from '../../package.json';
 import { removeLogs } from '../lib/log_remover.js';
+import { TASK_COMPILE } from '../task_names.js';
 import { HardhatPluginError } from 'hardhat/plugins';
 import type { NewTaskActionFunction } from 'hardhat/types/tasks';
 
 const action: NewTaskActionFunction = async (args, hre) => {
   try {
-    // TODO: import task name constant
-    await hre.tasks.getTask('compile').run();
+    await hre.tasks.getTask(TASK_COMPILE).run();
   } catch (e) {
     throw new HardhatPluginError(
       pkg.name,
