@@ -13,7 +13,7 @@ This plugin is intended in part to keep version-controlled code free of log stat
 ```bash
 npm install --save-dev @solidstate/hardhat-log-remover
 # or
-yarn add --dev @solidstate/hardhat-log-remover
+pnpm add -D @solidstate/hardhat-log-remover
 ```
 
 ## Usage
@@ -39,21 +39,21 @@ npx hardhat remove-logs
 # or
 
 ```bash
-yarn run hardhat remove-logs
+pnpm hardhat remove-logs
 ```
 
 Before removing logs, the plugin will ensure that all contracts can be compiled successfully.
 
 ## Development
 
-Install dependencies via Yarn:
+Install dependencies via pnpm:
 
 ```bash
-yarn install
+pnpm install
 ```
 
 Setup Husky to format code on commit:
 
 ```bash
-yarn prepare
+pnpm prepare
 ```
