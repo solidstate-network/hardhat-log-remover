@@ -1,20 +1,23 @@
-import regexp from '../src/lib/regexp';
-import { expect } from 'chai';
+import regexp from '../src/lib/regexp.js';
+import assert from 'node:assert';
+import { describe, it } from 'node:test';
 
 const testString = `
 // SPDX-License-Identifier: MIT
 
 pragma solidity ^0.7.0;
 
-import '@openzeppelin/contracts/token/ERC20/ERC20.sol';
+import { IERC20 } from '@solidstate/contracts/interfaces/IERC20.sol';
 import 'hardhat/console.sol';
 import'hardhat/console.sol';
 import "hardhat/console.sol";
 import
 'hardhat/console.sol'
 ;
+import { console } from 'hardhat/console.sol';
+import{console}from 'hardhat/console.sol';
 
-abstract contract Token is ERC20 {
+abstract contract Token is IERC20 {
   uint private _n;
 
   function runAction () external {
@@ -45,9 +48,9 @@ const expectedOutput = `
 
 pragma solidity ^0.7.0;
 
-import '@openzeppelin/contracts/token/ERC20/ERC20.sol';
+import { IERC20 } from '@solidstate/contracts/interfaces/IERC20.sol';
 
-abstract contract Token is ERC20 {
+abstract contract Token is IERC20 {
   uint private _n;
 
   function runAction () external {
@@ -62,14 +65,16 @@ abstract contract Token is ERC20 {
 `;
 
 describe('regular expressions', () => {
-  it('remove console.log imports', () => {
-    expect(testString.replace(regexp.imports, '')).not.to.include(
-      'console.sol',
-    );
+  it('remove console.sol imports', () => {
+    assert.match(testString, /console\.sol/);
+    assert.match(testString.replace(regexp.imports, ''), /console\.log/);
+    assert.doesNotMatch(testString.replace(regexp.imports, ''), /console\.sol/);
   });
 
   it('remove console.log calls', () => {
-    expect(testString.replace(regexp.calls, '')).not.to.include('console.log');
+    assert.match(testString, /console\.log/);
+    assert.match(testString.replace(regexp.calls, ''), /console\.sol/);
+    assert.doesNotMatch(testString.replace(regexp.calls, ''), /console\.log/);
   });
 
   it('leave unrelated code intact', () => {
@@ -77,6 +82,6 @@ describe('regular expressions', () => {
       .replace(regexp.imports, '')
       .replace(regexp.calls, '');
 
-    expect(output).to.equal(expectedOutput);
+    assert.equal(output, expectedOutput);
   });
 });
