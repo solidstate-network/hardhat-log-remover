@@ -1,19 +1,19 @@
 import regexp from '../lib/regexp.js';
-import fs from 'node:fs';
+import { readUtf8File, writeUtf8File } from '@nomicfoundation/hardhat-utils/fs';
 
 export const removeLogs = async (sourcePaths: string[]) => {
   let count = 0;
 
   await Promise.all(
     sourcePaths.map(async (sourcePath) => {
-      const content = await fs.promises.readFile(sourcePath, 'utf-8');
+      const content = await readUtf8File(sourcePath);
 
       if (content.includes('console.log') || content.includes('console.sol')) {
         const output = content
           .replace(regexp.imports, '')
           .replace(regexp.calls, '');
 
-        await fs.promises.writeFile(sourcePath, output);
+        await writeUtf8File(sourcePath, output);
         count++;
       }
     }),
