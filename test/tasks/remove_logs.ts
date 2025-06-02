@@ -1,12 +1,12 @@
 import { TASK_REMOVE_LOGS } from '../../src/task_names.js';
-import fs from 'fs';
+import { readUtf8File, writeUtf8File } from '@nomicfoundation/hardhat-utils/fs';
 import hre from 'hardhat';
 import assert from 'node:assert';
 import { describe, it, before, afterEach } from 'node:test';
 
 const readContractSource = async (name: string) => {
   const artifact = await hre.artifacts.readArtifact(name);
-  return fs.readFileSync(artifact.sourceName).toString();
+  return await readUtf8File(artifact.sourceName);
 };
 
 describe(TASK_REMOVE_LOGS, () => {
@@ -16,13 +16,13 @@ describe(TASK_REMOVE_LOGS, () => {
     const sourcePaths = await hre.solidity.getRootFilePaths();
 
     for (const sourcePath of sourcePaths) {
-      cache[sourcePath] = fs.readFileSync(sourcePath).toString();
+      cache[sourcePath] = await readUtf8File(sourcePath);
     }
   });
 
   afterEach(async () => {
     for (const sourcePath in cache) {
-      fs.writeFileSync(sourcePath, cache[sourcePath]);
+      await writeUtf8File(sourcePath, cache[sourcePath]);
     }
   });
 
