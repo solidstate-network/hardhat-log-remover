@@ -1,8 +1,8 @@
-import HardhatLogRemover from './src/index.js';
+import hardhatLogRemover from './src/index.js';
 import type { HardhatUserConfig } from 'hardhat/config';
 
 const config: HardhatUserConfig = {
-  plugins: [HardhatLogRemover],
+  plugins: [hardhatLogRemover],
 };
 
 export default config;

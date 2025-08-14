@@ -21,11 +21,11 @@ pnpm add -D @solidstate/hardhat-log-remover
 Load plugin in Hardhat config:
 
 ```javascript
-import HardhatLogRemover from '@solidstate/hardhat-log-remover';
+import hardhatLogRemover from '@solidstate/hardhat-log-remover';
 
 const config: HardhatUserConfig = {
   plugins: [
-    HardhatLogRemover,
+    hardhatLogRemover,
   ],
 };
 ```
