@@ -1,51 +1,48 @@
-import { expect } from 'chai';
-import fs from 'fs';
+import { TASK_REMOVE_LOGS } from '../../src/task_names.js';
+import { readUtf8File, writeUtf8File } from '@nomicfoundation/hardhat-utils/fs';
 import hre from 'hardhat';
-import { TASK_COMPILE_SOLIDITY_GET_SOURCE_PATHS } from 'hardhat/builtin-tasks/task-names';
-
-const TASK_REMOVE_LOGS = 'remove-logs';
+import assert from 'node:assert';
+import { describe, it, before, afterEach } from 'node:test';
 
 const readContractSource = async (name: string) => {
   const artifact = await hre.artifacts.readArtifact(name);
-  return fs.readFileSync(artifact.sourceName).toString();
+  return await readUtf8File(artifact.sourceName);
 };
 
 describe(TASK_REMOVE_LOGS, () => {
   const cache: { [sourcePath: string]: string } = {};
 
   before(async () => {
-    const sourcePaths: string[] = await hre.run(
-      TASK_COMPILE_SOLIDITY_GET_SOURCE_PATHS,
-    );
+    const sourcePaths = await hre.solidity.getRootFilePaths();
 
     for (const sourcePath of sourcePaths) {
-      cache[sourcePath] = fs.readFileSync(sourcePath).toString();
+      cache[sourcePath] = await readUtf8File(sourcePath);
     }
   });
 
   afterEach(async () => {
     for (const sourcePath in cache) {
-      fs.writeFileSync(sourcePath, cache[sourcePath]);
+      await writeUtf8File(sourcePath, cache[sourcePath]);
     }
   });
 
   it('removes console.log calls from source file', async () => {
     const contentsBefore = await readContractSource('ContractWithLogs');
-    expect(contentsBefore).to.include('console.log');
+    assert.match(contentsBefore, /console/);
 
-    await hre.run(TASK_REMOVE_LOGS);
+    await hre.tasks.getTask(TASK_REMOVE_LOGS).run();
 
     const contentsAfter = await readContractSource('ContractWithLogs');
-    expect(contentsAfter).not.to.include('console.sol');
+    assert.doesNotMatch(contentsAfter, /console/);
   });
 
   it('removes console.sol imports from souce file', async () => {
     const contentsBefore = await readContractSource('ContractWithLogs');
-    expect(contentsBefore).to.include('console.sol');
+    assert.match(contentsBefore, /console/);
 
-    await hre.run(TASK_REMOVE_LOGS);
+    await hre.tasks.getTask(TASK_REMOVE_LOGS).run();
 
     const contentsAfter = await readContractSource('ContractWithLogs');
-    expect(contentsAfter).not.to.include('console.sol');
+    assert.doesNotMatch(contentsAfter, /console/);
   });
 });
