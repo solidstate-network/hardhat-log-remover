@@ -1,6 +1,6 @@
 {
   "name": "@solidstate/hardhat-log-remover",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Remove Hardhat console.log imports and calls from Solidity source files",
   "keywords": [
     "harhat",
