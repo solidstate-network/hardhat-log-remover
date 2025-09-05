@@ -14,7 +14,9 @@ const action: NewTaskActionFunction = async (args, hre) => {
     );
   }
 
-  const sourcePaths = await hre.solidity.getRootFilePaths();
+  const sourcePaths = (await hre.solidity.getRootFilePaths()).filter(
+    (p) => !p.startsWith('npm:'),
+  );
 
   await removeLogs(sourcePaths);
 };
