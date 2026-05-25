@@ -53,7 +53,7 @@ describe(TASK_REMOVE_LOGS, () => {
     const hre = await createHardhatRuntimeEnvironment({
       ...config,
       solidity: {
-        version: '0.8.30',
+        version: '0.8.35',
         // npm file imported to test that it's excluded from processing
         npmFilesToBuild: ['@solidstate/contracts/interfaces/IERC20.sol'],
       },
