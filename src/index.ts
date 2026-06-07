@@ -1,12 +1,13 @@
 import pkg from '../package.json' with { type: 'json' };
 import taskRemoveLogs from './tasks/remove_logs.js';
+import { definePlugin } from 'hardhat/plugins';
 import { HardhatPlugin } from 'hardhat/types/plugins';
 
-const plugin: HardhatPlugin = {
+const plugin: HardhatPlugin = definePlugin({
   id: pkg.name!,
   npmPackage: pkg.name!,
   dependencies: () => [import('@solidstate/hardhat-solidstate-utils')],
   tasks: [taskRemoveLogs],
-};
+});
 
 export default plugin;
