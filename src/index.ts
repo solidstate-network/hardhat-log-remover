@@ -1,7 +1,7 @@
 import pkg from '../package.json' with { type: 'json' };
 import taskRemoveLogs from './tasks/remove_logs.js';
 import { definePlugin } from 'hardhat/plugins';
-import { HardhatPlugin } from 'hardhat/types/plugins';
+import type { HardhatPlugin } from 'hardhat/types/plugins';
 
 const plugin: HardhatPlugin = definePlugin({
   id: pkg.name!,
